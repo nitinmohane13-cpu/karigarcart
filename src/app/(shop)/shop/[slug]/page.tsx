@@ -84,7 +84,7 @@ export default async function ProductPage({ params }: { params: { slug: string }
             )}
             <div className="flex items-center gap-2 text-sm text-gray-600">
               <Package className="w-4 h-4" />
-              <span>GST included @ {product.gstRate}%</span>
+              <span>GST included @ {Number(product.gstRate)}%</span>
             </div>
           </div>
 
