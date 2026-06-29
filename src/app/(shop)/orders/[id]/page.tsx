@@ -55,17 +55,17 @@ export default async function OrderDetailPage({ params }: { params: { id: string
         </div>
         <div className="border-t border-gray-100 mt-4 pt-4 space-y-2 text-sm">
           <div className="flex justify-between text-gray-600">
-            <span>Subtotal</span><span>{formatPrice(order.subtotal)}</span>
+            <span>Subtotal</span><span>{formatPrice(Number(order.subtotal))}</span>
           </div>
           <div className="flex justify-between text-gray-600">
-            <span>GST</span><span>{formatPrice(order.gstAmount)}</span>
+            <span>GST</span><span>{formatPrice(Number(order.gstAmount))}</span>
           </div>
           <div className="flex justify-between text-gray-600">
             <span>Shipping</span>
-            <span>{Number(order.shippingCharge) === 0 ? 'FREE' : formatPrice(order.shippingCharge)}</span>
+            <span>{Number(order.shippingCharge) === 0 ? 'FREE' : formatPrice(Number(order.shippingCharge))}</span>
           </div>
           <div className="flex justify-between font-bold text-dark text-base pt-1 border-t border-gray-100">
-            <span>Total</span><span>{formatPrice(order.total)}</span>
+            <span>Total</span><span>{formatPrice(Number(order.total))}</span>
           </div>
         </div>
       </div>
