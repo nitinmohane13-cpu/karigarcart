@@ -59,7 +59,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
                 <Link href={`/shop/${item.product.slug}`} className="text-sm font-medium text-dark hover:text-brand-600">
                   {item.name}
                 </Link>
-                <p className="text-xs text-gray-400">SKU: {item.sku} · GST: {item.gstRate}%</p>
+                <p className="text-xs text-gray-400">SKU: {item.sku} · GST: {Number(item.gstRate)}%</p>
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium">{formatPrice(Number(item.price) * item.quantity)}</p>
