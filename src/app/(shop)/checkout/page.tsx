@@ -23,13 +23,11 @@ export default function CheckoutPage() {
   const grandTotal = subtotal + shipping
 
   if (!session) {
-    router.push('/auth/login?next=/checkout')
-    return null
+    return <meta httpEquiv="refresh" content="0;url=/auth/login?next=/checkout" />
   }
 
   if (items.length === 0) {
-    router.push('/cart')
-    return null
+    return <meta httpEquiv="refresh" content="0;url=/cart" />
   }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
