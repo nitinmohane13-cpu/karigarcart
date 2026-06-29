@@ -1,0 +1,127 @@
+// src/app/(shop)/page.tsx
+import Link from 'next/link'
+import { prisma } from '@/lib/prisma'
+import ProductCard from '@/components/shop/ProductCard'
+import { ArrowRight, Truck, Shield, RefreshCw, Headphones } from 'lucide-react'
+
+async function getFeaturedProducts() {
+  return prisma.product.findMany({
+    where: { isFeatured: true, isActive: true },
+    include: { category: true },
+    take: 8,
+  })
+}
+
+async function getCategories() {
+  return prisma.category.findMany({ where: { isActive: true }, take: 6 })
+}
+
+export default async function HomePage() {
+  const [products, categories] = await Promise.all([getFeaturedProducts(), getCategories()])
+
+  const features = [
+    { icon: Truck, title: 'Fast Delivery', desc: 'Orders shipped in 24–48 hrs' },
+    { icon: Shield, title: 'ISI Certified', desc: 'Genuine, quality-assured products' },
+    { icon: RefreshCw, title: 'Easy Returns', desc: '7-day hassle-free returns' },
+    { icon: Headphones, title: 'Expert Support', desc: 'Mon–Sat 9am–6pm helpline' },
+  ]
+
+  return (
+    <div>
+      {/* Hero */}
+      <section className="bg-dark text-white relative overflow-hidden">
+        <div className="absolute inset-0 opacity-10">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-brand-500 rounded-full -translate-y-1/2 translate-x-1/2" />
+          <div className="absolute bottom-0 left-0 w-64 h-64 bg-brand-700 rounded-full translate-y-1/2 -translate-x-1/4" />
+        </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative">
+          <div className="max-w-2xl">
+            <p className="text-brand-400 font-medium text-sm tracking-widest uppercase mb-3">India's DIY Marketplace</p>
+            <h1 className="font-display text-4xl md:text-6xl font-bold leading-tight mb-6">
+              Build it.<br />Fix it.<br />
+              <span className="text-brand-400">Own it.</span>
+            </h1>
+            <p className="text-gray-300 text-lg mb-8 max-w-lg">
+              Tools, paints, electrical & plumbing supplies. Everything you need to get the job done — at trade prices.
+            </p>
+            <div className="flex gap-3 flex-wrap">
+              <Link href="/shop" className="btn-primary text-base py-3 px-6 flex items-center gap-2">
+                Shop Now <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link href="/shop?featured=true" className="btn-secondary text-base py-3 px-6 bg-transparent border-gray-600 text-white hover:bg-white/10">
+                View Deals
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features bar */}
+      <section className="border-b border-gray-100 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {features.map((f) => (
+              <div key={f.title} className="flex items-center gap-3">
+                <div className="bg-brand-50 text-brand-600 p-2 rounded-lg flex-shrink-0">
+                  <f.icon className="w-5 h-5" />
+                </div>
+                <div>
+                  <p className="font-semibold text-sm text-dark">{f.title}</p>
+                  <p className="text-xs text-gray-500">{f.desc}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Categories */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+        <div className="flex items-center justify-between mb-7">
+          <h2 className="font-display text-2xl font-bold text-dark">Shop by Category</h2>
+          <Link href="/shop" className="text-brand-600 font-medium text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            All categories <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
+          {categories.map((cat) => (
+            <Link
+              key={cat.id}
+              href={`/shop?category=${cat.slug}`}
+              className="card p-4 text-center hover:border-brand-200 hover:shadow-md transition-all duration-150 group"
+            >
+              <div className="text-2xl mb-2">🔧</div>
+              <p className="text-sm font-semibold text-dark group-hover:text-brand-600 transition-colors">{cat.name}</p>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* Featured products */}
+      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
+        <div className="flex items-center justify-between mb-7">
+          <h2 className="font-display text-2xl font-bold text-dark">Featured Products</h2>
+          <Link href="/shop" className="text-brand-600 font-medium text-sm flex items-center gap-1 hover:gap-2 transition-all">
+            View all <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+          {products.map((p) => (
+            <ProductCard key={p.id} product={p as any} />
+          ))}
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="bg-brand-600 text-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 text-center">
+          <h2 className="font-display text-3xl font-bold mb-3">Free shipping on orders above ₹999</h2>
+          <p className="text-brand-100 mb-6">Same-day dispatch on orders placed before 2 PM</p>
+          <Link href="/shop" className="bg-white text-brand-700 font-bold py-3 px-8 rounded-lg hover:bg-brand-50 transition-colors">
+            Shop Now
+          </Link>
+        </div>
+      </section>
+    </div>
+  )
+}
