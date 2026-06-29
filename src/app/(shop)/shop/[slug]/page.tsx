@@ -40,10 +40,10 @@ export default async function ProductPage({ params }: { params: { slug: string }
 
           {/* Price */}
           <div className="flex items-baseline gap-3 mb-2">
-            <span className="text-3xl font-bold text-dark">{formatPrice(product.price)}</span>
+            <span className="text-3xl font-bold text-dark">{formatPrice(Number(product.price))}</span>
             {discount > 0 && (
               <>
-                <span className="text-lg text-gray-400 line-through">{formatPrice(product.mrp)}</span>
+                <span className="text-lg text-gray-400 line-through">{formatPrice(Number(product.mrp))}</span>
                 <span className="badge bg-green-100 text-green-700 text-sm py-0.5">{discount}% off</span>
               </>
             )}

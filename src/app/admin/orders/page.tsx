@@ -46,7 +46,7 @@ export default async function AdminOrdersPage() {
                     {new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: '2-digit' })}
                   </td>
                   <td className="px-5 py-3.5 text-gray-600">{o.items.length}</td>
-                  <td className="px-5 py-3.5 font-semibold">{formatPrice(o.total)}</td>
+                  <td className="px-5 py-3.5 font-semibold">{formatPrice(Number(o.total))}</td>
                   <td className="px-5 py-3.5">
                     <span className={`badge ${o.paymentStatus === 'PAID' ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
                       {o.paymentStatus}

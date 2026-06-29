@@ -30,7 +30,7 @@ export default async function AdminDashboard() {
   const { totalOrders, totalRevenue, totalProducts, totalUsers, recentOrders } = await getStats()
 
   const stats = [
-    { label: 'Total Revenue', value: formatPrice(totalRevenue), icon: TrendingUp, color: 'bg-green-50 text-green-600' },
+    { label: 'Total Revenue', value: formatPrice(Number(totalRevenue)), icon: TrendingUp, color: 'bg-green-50 text-green-600' },
     { label: 'Total Orders', value: totalOrders, icon: ShoppingBag, color: 'bg-blue-50 text-blue-600' },
     { label: 'Products', value: totalProducts, icon: Package, color: 'bg-orange-50 text-orange-600' },
     { label: 'Customers', value: totalUsers, icon: Users, color: 'bg-purple-50 text-purple-600' },
@@ -81,7 +81,7 @@ export default async function AdminDashboard() {
                   <td className="px-5 py-3.5 text-gray-500">
                     {new Date(o.createdAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short' })}
                   </td>
-                  <td className="px-5 py-3.5 font-semibold">{formatPrice(o.total)}</td>
+                  <td className="px-5 py-3.5 font-semibold">{formatPrice(Number(o.total))}</td>
                   <td className="px-5 py-3.5">
                     <span className={`badge ${STATUS_COLORS[o.status] || 'bg-gray-100 text-gray-600'}`}>{o.status}</span>
                   </td>

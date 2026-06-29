@@ -63,7 +63,7 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
               </div>
               <div className="text-right">
                 <p className="text-sm font-medium">{formatPrice(Number(item.price) * item.quantity)}</p>
-                <p className="text-xs text-gray-400">{formatPrice(item.price)} × {item.quantity}</p>
+                <p className="text-xs text-gray-400">{formatPrice(Number(item.price))} × {item.quantity}</p>
               </div>
             </div>
           ))}
@@ -71,17 +71,17 @@ export default async function AdminOrderDetailPage({ params }: { params: { id: s
 
         <div className="border-t border-gray-100 mt-4 pt-4 space-y-2 text-sm">
           <div className="flex justify-between text-gray-600">
-            <span>Subtotal</span><span>{formatPrice(order.subtotal)}</span>
+            <span>Subtotal</span><span>{formatPrice(Number(order.subtotal))}</span>
           </div>
           <div className="flex justify-between text-gray-600">
-            <span>GST</span><span>{formatPrice(order.gstAmount)}</span>
+            <span>GST</span><span>{formatPrice(Number(order.gstAmount))}</span>
           </div>
           <div className="flex justify-between text-gray-600">
             <span>Shipping</span>
-            <span>{Number(order.shippingCharge) === 0 ? 'FREE' : formatPrice(order.shippingCharge)}</span>
+            <span>{Number(order.shippingCharge) === 0 ? 'FREE' : formatPrice(Number(order.shippingCharge))}</span>
           </div>
           <div className="flex justify-between font-bold text-base text-dark pt-1 border-t border-gray-100">
-            <span>Total</span><span>{formatPrice(order.total)}</span>
+            <span>Total</span><span>{formatPrice(Number(order.total))}</span>
           </div>
         </div>
       </div>

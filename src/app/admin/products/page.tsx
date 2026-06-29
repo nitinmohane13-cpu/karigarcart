@@ -43,7 +43,7 @@ export default async function AdminProductsPage() {
                   </td>
                   <td className="px-5 py-3.5 font-mono text-xs text-gray-500">{p.sku}</td>
                   <td className="px-5 py-3.5 text-gray-600">{p.category.name}</td>
-                  <td className="px-5 py-3.5 font-semibold">{formatPrice(p.price)}</td>
+                  <td className="px-5 py-3.5 font-semibold">{formatPrice(Number(p.price))}</td>
                   <td className="px-5 py-3.5">
                     <span className={`font-medium ${p.stock === 0 ? 'text-red-500' : p.stock < 5 ? 'text-yellow-600' : 'text-gray-700'}`}>
                       {p.stock}

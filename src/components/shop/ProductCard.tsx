@@ -54,9 +54,9 @@ export default function ProductCard({ product }: { product: ProductWithCategory 
         <p className="text-xs text-gray-400 mb-1">{product.category.name}</p>
         <p className="text-sm font-semibold text-dark line-clamp-2 flex-1 mb-2">{product.name}</p>
         <div className="flex items-baseline gap-2 mb-3">
-          <span className="text-base font-bold text-dark">{formatPrice(product.price)}</span>
+          <span className="text-base font-bold text-dark">{formatPrice(Number(product.price))}</span>
           {discount > 0 && (
-            <span className="text-xs text-gray-400 line-through">{formatPrice(product.mrp)}</span>
+            <span className="text-xs text-gray-400 line-through">{formatPrice(Number(product.mrp))}</span>
           )}
         </div>
         <button

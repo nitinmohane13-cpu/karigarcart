@@ -6,7 +6,8 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatPrice(price: number | string) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function formatPrice(price: number | string | any) {
   return new Intl.NumberFormat('en-IN', {
     style: 'currency',
     currency: 'INR',

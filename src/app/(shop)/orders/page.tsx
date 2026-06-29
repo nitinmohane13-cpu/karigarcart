@@ -49,7 +49,7 @@ export default async function OrdersPage() {
                 </p>
               </div>
               <div className="text-right">
-                <p className="font-bold text-dark">{formatPrice(order.total)}</p>
+                <p className="font-bold text-dark">{formatPrice(Number(order.total))}</p>
                 <span className={`badge mt-1 ${STATUS_COLORS[order.status] || 'bg-gray-100 text-gray-600'}`}>
                   {order.status}
                 </span>
