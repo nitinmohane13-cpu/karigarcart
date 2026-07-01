@@ -1,7 +1,6 @@
 'use client'
 // src/components/shop/ProductCard.tsx
 import Link from 'next/link'
-import Image from 'next/image'
 import { useState } from 'react'
 import { ShoppingCart } from 'lucide-react'
 import { formatPrice } from '@/lib/utils'
@@ -35,7 +34,12 @@ export default function ProductCard({ product }: { product: ProductWithCategory 
       {/* Image */}
       <div className="relative bg-gray-50 aspect-square overflow-hidden">
         {product.images[0] && !imgError ? (
-          <Image src={product.images[0]} alt={product.name} fill className="object-cover group-hover:scale-105 transition-transform duration-300" onError={() => setImgError(true)} />
+          <img
+            src={product.images[0]}
+            alt={product.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            onError={() => setImgError(true)}
+          />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-5xl">🎨</div>
         )}
