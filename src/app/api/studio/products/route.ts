@@ -12,9 +12,12 @@ export async function GET(req: NextRequest) {
   const products = await prisma.product.findMany({
     where: {
       isActive: true,
-      category: { slug: 'grownup-collection' },
+      OR: [
+        { category: { slug: { in: ['grownup', 'grownup-collection'] } } },
+        { category: { name: { contains: 'grownup', mode: 'insensitive' } } },
+      ],
     },
-    include: { category: { select: { name: true } } },
+    include: { category: { select: { name: true, slug: true } } },
     orderBy: { createdAt: 'desc' },
   })
 
