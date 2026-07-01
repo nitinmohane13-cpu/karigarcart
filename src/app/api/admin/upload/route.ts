@@ -16,7 +16,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const formData = await req.formData()
-  const files = formData.getAll('files[]') as File[]
+  const files = formData.getAll('files') as File[]
 
   if (!files.length)
     return NextResponse.json({ error: 'No files provided' }, { status: 400 })
