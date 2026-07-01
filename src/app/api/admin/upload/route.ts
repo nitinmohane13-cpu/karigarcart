@@ -2,48 +2,55 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getServerSession } from 'next-auth'
 import { authOptions } from '@/lib/auth'
-import { writeFile, mkdir } from 'fs/promises'
-import path from 'path'
+import { v2 as cloudinary } from 'cloudinary'
 
-function adminGuard(session: any) {
-  if (!session || session.user.role !== 'ADMIN')
-    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
-  return null
-}
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+})
 
 export async function POST(req: NextRequest) {
   const session = await getServerSession(authOptions)
-  const guard = adminGuard(session)
-  if (guard) return guard
+  if (!session || session.user.role !== 'ADMIN')
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 })
 
   const formData = await req.formData()
-  const files = formData.getAll('files') as File[]
+  const files = formData.getAll('files[]') as File[]
 
-  if (!files || files.length === 0)
+  if (!files.length)
     return NextResponse.json({ error: 'No files provided' }, { status: 400 })
-
-  const uploadDir = path.join(process.cwd(), 'public', 'uploads', 'products')
-  await mkdir(uploadDir, { recursive: true })
 
   const urls: string[] = []
 
   for (const file of files) {
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-    if (!allowedTypes.includes(file.type))
+    // Validate type
+    if (!['image/jpeg', 'image/png', 'image/webp', 'image/gif'].includes(file.type))
       return NextResponse.json({ error: `Invalid file type: ${file.type}` }, { status: 400 })
 
-    const maxSize = 5 * 1024 * 1024 // 5 MB
-    if (file.size > maxSize)
-      return NextResponse.json({ error: 'File too large (max 5 MB)' }, { status: 400 })
+    // Validate size (5MB)
+    if (file.size > 5 * 1024 * 1024)
+      return NextResponse.json({ error: 'File too large (max 5MB)' }, { status: 400 })
 
-    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg'
-    const filename = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`
-    const filepath = path.join(uploadDir, filename)
+    // Convert to buffer
+    const bytes = await file.arrayBuffer()
+    const buffer = Buffer.from(bytes)
 
-    const buffer = Buffer.from(await file.arrayBuffer())
-    await writeFile(filepath, buffer)
+    // Upload to Cloudinary
+    const result = await new Promise<any>((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          folder: 'karigarcart/products',
+          transformation: [{ width: 800, height: 800, crop: 'limit', quality: 'auto', fetch_format: 'auto' }],
+        },
+        (error, result) => {
+          if (error) reject(error)
+          else resolve(result)
+        }
+      ).end(buffer)
+    })
 
-    urls.push(`/uploads/products/${filename}`)
+    urls.push(result.secure_url)
   }
 
   return NextResponse.json({ urls })
