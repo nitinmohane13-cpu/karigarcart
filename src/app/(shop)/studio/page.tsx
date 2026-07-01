@@ -105,7 +105,6 @@ export default function StudioGate() {
               style={{
                 background: 'rgba(255,255,255,0.05)',
                 border: '1px solid rgba(255,0,110,0.3)',
-                focusRingColor: '#ff006e',
               }}
               required
             />
